@@ -1,0 +1,24 @@
+{
+  "name": "web-component-centric",
+  "version": "1.0.0",
+  "description": "web-component centric approach to build your web app",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fernandogmar/web-component-centric.git"
+  },
+  "keywords": [
+    "web-component",
+    "lit",
+    "architecture"
+  ],
+  "author": "fernandogmar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fernandogmar/web-component-centric/issues"
+  },
+  "homepage": "https://github.com/fernandogmar/web-component-centric#readme"
+}
