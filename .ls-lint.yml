@@ -1,0 +1,72 @@
+ls:
+  .ts: kebab-case
+
+  src:
+    .dir: kebab-case
+    .ts: kebab-case
+
+  # first folder level corresponds to a team/group of components
+  # no files allowed, only folders
+  src/*:
+    .*: exists:0
+    .*.ts: exists:0
+    .ts: regex:index
+
+  # second folder level could contain a shared folder for the components
+  # it will contain folders (3rd level) of services, controllers, mixins, styles..
+  src/*/*-shared:
+    .dir: regex:${1}-shared$ # e.g. src/wcc/wcc-shared
+    .*: exists:0
+    .*.ts: exists:0
+    .ts: regex:index
+
+  # second folder level corresponds to components folders
+  # folders in the same group share same prefix
+  src/*/*:
+    .dir: regex:${1}-[a-z0-9]+(-[a-z0-9]+)*$ # e.g. src/wcc/wcc-my-component
+    # required src/wcc/wcc-my-component/index.ts and e.g.  src/wcc/wcc-my-component/wcc-my-component.ts
+    .ts: regex:index | regex:^${0}$ | exists:2 
+    # required e.g. src/wcc/wcc-my-component/wcc-my-component.stories.ts
+    .stories.ts: regex:^${0}$ | exists:1
+    .styles.ts: regex:^${0}$
+
+  # third level folder is reserved for utilities grouped by semantic
+  src/*/*/*:
+    .dir: regex:^(assets|controllers|helpers|mixins|mocks|services|styles|types)$
+    .*: kebab-case
+    .*.ts: kebab-case
+
+  src/*/*/controllers:
+    # allowed only *.controller.ts and *.spec.ts files
+    .*: exists:0
+    .*.ts: exists:0
+    .controller.ts: kebab-case
+    .spec.ts: kebab-case
+
+    "*":
+      .dir: exists:0 # no subdirectories allowed
+
+  src/*/*/services:
+    # allowed only *.service.ts and *.spec.ts files
+    .*: exists:0
+    .*.ts: exists:0
+    .service.ts: kebab-case
+    .spec.ts: kebab-case
+
+    "*":
+      .dir: exists:0 # no subdirectories allowed
+
+  src/*/*/styles:
+    # allowed only *.service.ts and *.spec.ts files
+    .*: exists:0
+    .*.ts: exists:0
+    .styles.ts: kebab-case
+
+    "*":
+      .dir: exists:0 # no subdirectories allowed
+
+
+
+ignore:
+  - node_modules
+  - .DS_store
