@@ -32,7 +32,7 @@ ls:
 
   # third level folder is reserved for utilities grouped by semantic
   src/*/*/*:
-    .dir: regex:^(assets|controllers|helpers|mixins|mocks|services|styles|types)$
+    .dir: regex:^(assets|controllers|directives|helpers|mixins|mocks|services|styles|types)$
     .*: kebab-case
     .*.ts: kebab-case
 

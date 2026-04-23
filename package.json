@@ -7,6 +7,7 @@
     "build": "tsc && vite build",
     "build-storybook": "storybook build",
     "dev": "vite",
+    "lint:eslint": "eslint . --debug",
     "lint:folders": "ls-lint",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006"
@@ -16,6 +17,8 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.1.2",
+    "@eslint/css": "^1.1.0",
+    "@eslint/js": "^10.0.1",
     "@ls-lint/ls-lint": "^2.3.1",
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-docs": "^10.3.5",
@@ -23,9 +26,15 @@
     "@storybook/web-components-vite": "^10.3.5",
     "@vitest/browser-playwright": "^4.1.5",
     "@vitest/coverage-v8": "^4.1.5",
+    "eslint": "^10.2.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-boundaries": "^6.0.2",
+    "globals": "^17.5.0",
+    "jiti": "^2.6.1",
     "playwright": "^1.59.1",
     "storybook": "^10.3.5",
     "typescript": "~6.0.2",
+    "typescript-eslint": "^8.59.0",
     "vite": "^8.0.9",
     "vitest": "^4.1.5"
   }
