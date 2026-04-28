@@ -38,7 +38,7 @@ export default defineConfig([
                 captured: { component: "!{{ from.component }}"}
               }
             },
-            message: "Access to files from a different component is not allowed. Attempted to access component: {{to.captured.family}}/{{to.captured.component}}"
+            message: "Access to files from a different component is not allowed. Attempted to access component: [{{to.captured.family}}/{{to.captured.component}}]"
           },
           {
             // disallow access to a different family
@@ -47,7 +47,7 @@ export default defineConfig([
                 captured: { family: "!{{ from.family }}" }
               }
             },
-            message: "Access to a different family is not allowed. Attempted to access: {{to.captured.family}}"
+            message: "Access to a different family is not allowed. Attempted to access: [{{to.captured.family}}]"
           },
           {
             allow: {
@@ -56,20 +56,29 @@ export default defineConfig([
                 {
                   captured: { 
                     component: "!{{ from.component }}", 
-                    family: ["{{ from.family }}", "[a-z0-9]*"],
+                    family: ["{{ from.family }}", "!*-*"],
                     fileName: "index"
-                  }
+                  },
+                  category: "component-level"
                 },
                 // or any shared file of a different component but same family or base family (no dashes)
                 {
                   captured: {
                     component: "!{{ from.component }}", 
-                    family: ["{{ from.family }}", "[a-z0-9]*"]
+                    family: ["{{ from.family }}", "!*-*"]
                   },
                   type: "shared-file"
                 }
               ]
-            }
+            },
+            disallow: {
+              // disallow access to any family from base family (no dashes)
+              from: { captured: { family: "!*-*" } },// base family
+              to: {
+                captured: { family: "!{{ from.family }}" }
+              }
+            },
+            message: "Access to any family from a base family is not allowed. Attempted to access [{{to.captured.family}}] from [{{from.captured.family}}]"
           }
         ]
       }]
@@ -78,9 +87,9 @@ export default defineConfig([
       "boundaries/debug": {
         enabled: true,
         messages: {
-          files: true,
+          files: false,
           dependencies: false,
-          violations: false,
+          violations: true,
         },
         filter: {
           files: [{ captured: { family: '*' } }]// show only files in families

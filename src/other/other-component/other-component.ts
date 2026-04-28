@@ -1,0 +1,1 @@
+import '../../wcc/wcc-my-component';// FORBIDDEN
