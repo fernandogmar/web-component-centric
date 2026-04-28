@@ -52,19 +52,19 @@ export default defineConfig([
           {
             allow: {
               to: [
-                // allow to access the index of a different component but same family
+                // allow to access the index of a different component but same family or base family (no dashes)
                 {
                   captured: { 
                     component: "!{{ from.component }}", 
-                    family: "{{ from.family }}",
+                    family: ["{{ from.family }}", "[a-z0-9]*"],
                     fileName: "index"
                   }
                 },
-                // or any shared file of a different component but same family
+                // or any shared file of a different component but same family or base family (no dashes)
                 {
                   captured: {
                     component: "!{{ from.component }}", 
-                    family: "{{ from.family }}"
+                    family: ["{{ from.family }}", "[a-z0-9]*"]
                   },
                   type: "shared-file"
                 }
