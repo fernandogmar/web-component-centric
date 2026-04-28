@@ -28,13 +28,36 @@ export default defineConfig([
     rules: {
       ...boundaries.configs.recommended.rules,
       "boundaries/dependencies": [2, {
-        // disallow all local imports by default
-        default: "disallow",
+        // allow all local imports by default
+        default: "allow",
         rules: [ 
           {
+            // disallow access to a different component
+            disallow: {
+              to: {
+                captured: { component: "!{{ from.component }}"}
+              }
+            },
+            message: "Access to files from a different component is not allowed. Attempted to access component: {{to.captured.family}}/{{to.captured.component}}"
+          },
+          {
+            // disallow access to a different family
             disallow: {
               to: {
                 captured: { family: "!{{ from.family }}" }
+              }
+            },
+            message: "Access to a different family is not allowed. Attempted to access: {{to.captured.family}}"
+          },
+          {
+            // allow to access a different component in the same family (exposing index only)
+            allow: {
+              to: {
+                captured: { 
+                  component: "!{{ from.component }}", 
+                  family: "{{ from.family }}",
+                  fileName: "index"
+                }
               }
             }
           }
@@ -49,25 +72,31 @@ export default defineConfig([
           dependencies: false,
           violations: false,
         },
+        filter: {
+          files: [{ captured: { family: '*' } }]// show only files in families
+        }
       },
       "boundaries/elements": [
         {
           type: "file",
+          category: "family-level",
           pattern: 'src/*/*.ts',
           mode: "full",
           capture:['family', 'fileName']
         },
         {
           type: "file",
-          pattern: 'src/*/*/**/*.*.ts',
+          category: "component-level",
+          pattern: ['src/*/*/*.*.ts', 'src/*/*/*.ts'],
           mode: "full",
-          capture:['family', 'component', 'internal' , 'fileName', 'role']
+          capture:['family', 'component', 'fileName', 'role']
         },
         {
           type: "file",
-          pattern: 'src/*/*/**/*.ts',
+          category: "internal-level",
+          pattern: ['src/*/*/*.*.ts', 'src/*/*/*.ts'],
           mode: "full",
-          capture:['family', 'component', 'internal' , 'fileName']
+          capture:['family', 'component', 'internal' , 'fileName', 'role']
         }
       ]
     }
