@@ -50,15 +50,25 @@ export default defineConfig([
             message: "Access to a different family is not allowed. Attempted to access: {{to.captured.family}}"
           },
           {
-            // allow to access a different component in the same family (exposing index only)
             allow: {
-              to: {
-                captured: { 
-                  component: "!{{ from.component }}", 
-                  family: "{{ from.family }}",
-                  fileName: "index"
+              to: [
+                // allow to access the index of a different component but same family
+                {
+                  captured: { 
+                    component: "!{{ from.component }}", 
+                    family: "{{ from.family }}",
+                    fileName: "index"
+                  }
+                },
+                // or any shared file of a different component but same family
+                {
+                  captured: {
+                    component: "!{{ from.component }}", 
+                    family: "{{ from.family }}"
+                  },
+                  type: "shared-file"
                 }
-              }
+              ]
             }
           }
         ]
@@ -85,6 +95,13 @@ export default defineConfig([
           capture:['family', 'fileName']
         },
         {
+          type: "shared-file",
+          category: "component-level",
+          pattern: ['src/*/*-shared/*.*.ts', 'src/*/*-shared/*.ts'],
+          mode: "full",
+          capture:['family', 'component', 'fileName', 'role']
+        },
+        {
           type: "file",
           category: "component-level",
           pattern: ['src/*/*/*.*.ts', 'src/*/*/*.ts'],
@@ -92,9 +109,16 @@ export default defineConfig([
           capture:['family', 'component', 'fileName', 'role']
         },
         {
+          type: "shared-file",
+          category: "internal-level",
+          pattern: ['src/*/*-shared/**/*.*.ts', 'src/*/*-shared/**/*.ts'],
+          mode: "full",
+          capture:['family', 'component', 'internal' , 'fileName', 'role']
+        },
+        {
           type: "file",
           category: "internal-level",
-          pattern: ['src/*/*/*.*.ts', 'src/*/*/*.ts'],
+          pattern: ['src/*/*/**/*.*.ts', 'src/*/*/**/*.ts'],
           mode: "full",
           capture:['family', 'component', 'internal' , 'fileName', 'role']
         }
