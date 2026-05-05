@@ -1,0 +1,1 @@
+import '../wcc-my-feature-other/wcc-my-feature-other.stories';// ALLOWED

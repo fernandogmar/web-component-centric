@@ -52,7 +52,7 @@ export default defineConfig([
           {
             allow: {
               to: [
-                // allow to access the index of a different component but same family or base family (no dashes)
+                // allow access to the index of a different component but same family or base family (no dashes)
                 {
                   captured: { 
                     component: "!{{ from.component }}", 
@@ -79,6 +79,24 @@ export default defineConfig([
               }
             },
             message: "Access to any family from a base family is not allowed. Attempted to access [{{to.captured.family}}] from [{{from.captured.family}}]"
+          },
+          {
+            disallow: {
+              // disallow any access to stories or spec files
+              to: { captured: { role: ["stories", "spec"]}}
+            },
+            message: "Attempt to access a file with role [{{to.captured.role}}], only allowed from files with same role and family." 
+          },
+          {
+            allow: {
+              // allow access to stories or spec files from other stories or spec files with the same family
+              from: {
+                captured: { family: "{{to.family}}", role: "{{to.role}}"}
+              },
+              to: {
+                captured: { role: ["stories", "spec"]}
+              }
+            }
           }
         ]
       }]
