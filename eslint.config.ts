@@ -7,8 +7,28 @@ import boundaries, { type Config } from "eslint-plugin-boundaries";
 
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.browser } },
+  { 
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], 
+    plugins: { js }, 
+    extends: ["js/recommended"], 
+    languageOptions: { globals: globals.browser }, 
+    rules: {
+      /**
+       * Disallow parent directory imports (../)
+       *
+       * Rationale:
+       * - Prevent fragile relative paths
+       * - Encourage absolute imports / path aliases (e.g. @/...)
+       * - Keep module boundaries clearer
+       */
+      "no-restricted-imports": ["error", { patterns: [{
+        group: ["**/../*"],
+        message: "Avoid parent imports (../). Use path aliases like @/ instead."
+      }]}]
+    }
+  },
   tseslint.configs.recommended,
+
   { files: ["**/*.css"], plugins: { css }, language: "css/css", extends: ["css/recommended"] },
   {
     settings: {

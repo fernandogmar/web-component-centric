@@ -1,1 +1,1 @@
-//import '../../wcc/wcc-my-component';// FORBIDDEN
+import '@/wcc/wcc-my-component';// FORBIDDEN
