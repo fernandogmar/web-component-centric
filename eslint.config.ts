@@ -101,6 +101,48 @@ export default defineConfig([
             message: "Access to any family from a base family is not allowed. Attempted to access [{{to.captured.family}}] from [{{from.captured.family}}]"
           },
           {
+            allow: {
+              // special app component from a feature family (with dashes)
+              from: {
+                captured: { 
+                  component: "*-app",
+                  family: "*-*" 
+                }
+              },
+              to: [
+                // allow access to any index of a different component
+                {
+                  captured: { 
+                    component: "!{{ from.component }}", 
+                    fileName: "index"
+                  },
+                  category: "component-level"
+                },
+                // or any shared file of a different component
+                {
+                  captured: {
+                    component: "!{{ from.component }}", 
+                  },
+                  type: "shared-file"
+                }
+              ]
+            },
+            disallow: {
+              // disallow access to app components from any other component
+              from: { 
+                captured: { 
+                  component: "!{{ to.component }}" 
+                }
+              },
+              to: {
+                captured: {
+                  component: "*-app"
+                }
+              }
+            },
+            message: "Access to app components is not allowed. Attempted to access [{{to.captured.family}}/{{to.captured.component}}] from [{{from.captured.family}}/{{from.captured.component}}]"
+          },
+          {
             disallow: {
               // disallow any access to stories or spec files
               to: { captured: { role: ["stories", "spec"]}}
@@ -126,8 +168,8 @@ export default defineConfig([
         enabled: true,
         messages: {
           files: false,
-          dependencies: false,
-          violations: true,
+          dependencies: true,
+          violations: false,
         },
         filter: {
           files: [{ captured: { family: '*' } }]// show only files in families
